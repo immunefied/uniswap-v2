@@ -1,6 +1,8 @@
 [profile.default]
-src = "src"
+# Ignore the src directory when compiling
+src = "src1"
 out = "out"
+tests = "tests"
 libs = ["lib"]
 chain_id = 1
 auto_detect_solc = true
@@ -11,3 +13,10 @@ optimizer_runs = 999999
 libraries = []
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+[fmt]
+# Style of underscores in number literals
+number_underscore = "thousands"
+
+[rpc_endpoints]
+mainnet = "https://rpc.ankr.com/eth"
