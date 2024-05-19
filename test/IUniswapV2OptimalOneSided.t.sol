@@ -6,11 +6,10 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
 import {IUniswapV2Factory} from "./interfaces/IUniswapV2Factory.sol";
 import {IUniswapV2Pair} from "./interfaces/IUniswapV2Pair.sol";
 import {IUniswapV2Router} from "./interfaces/IUniswapV2Router.sol";
+
 contract TestUniswapOptimalOneSidedSupply {
-    address private constant FACTORY =
-        0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
-    address private constant ROUTER =
-        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+    address private constant FACTORY = 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
+    address private constant ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address private constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
     function sqrt(uint256 y) private pure returns (uint256 z) {
@@ -34,7 +33,7 @@ contract TestUniswapOptimalOneSidedSupply {
     s = (sqrt(((2 - f)r)^2 + 4(1 - f)ar) - (2 - f)r) / (2(1 - f))
     */
     function getSwapAmount(uint256 r, uint256 a) public pure returns (uint256) {
-        return (sqrt(r * (r * 3988009 + a * 3988000)) - r * 1997) / 1994;
+        return (sqrt(r * (r * 3_988_009 + a * 3_988_000)) - r * 1997) / 1994;
     }
 
     /* Optimal one-sided supply
@@ -47,8 +46,7 @@ contract TestUniswapOptimalOneSidedSupply {
         IERC20(_tokenA).transferFrom(msg.sender, address(this), _amountA);
 
         address pair = IUniswapV2Factory(FACTORY).getPair(_tokenA, _tokenB);
-        (uint256 reserve0, uint256 reserve1, ) = IUniswapV2Pair(pair)
-            .getReserves();
+        (uint256 reserve0, uint256 reserve1,) = IUniswapV2Pair(pair).getReserves();
 
         uint256 swapAmount;
         if (IUniswapV2Pair(pair).token0() == _tokenA) {
@@ -71,13 +69,7 @@ contract TestUniswapOptimalOneSidedSupply {
         path[0] = _from;
         path[1] = _to;
 
-        IUniswapV2Router(ROUTER).swapExactTokensForTokens(
-            _amount,
-            1,
-            path,
-            address(this),
-            block.timestamp
-        );
+        IUniswapV2Router(ROUTER).swapExactTokensForTokens(_amount, 1, path, address(this), block.timestamp);
     }
 
     function _addLiquidity(address _tokenA, address _tokenB) internal {
@@ -86,15 +78,6 @@ contract TestUniswapOptimalOneSidedSupply {
         IERC20(_tokenA).approve(ROUTER, balA);
         IERC20(_tokenB).approve(ROUTER, balB);
 
-        IUniswapV2Router(ROUTER).addLiquidity(
-            _tokenA,
-            _tokenB,
-            balA,
-            balB,
-            0,
-            0,
-            address(this),
-            block.timestamp
-        );
+        IUniswapV2Router(ROUTER).addLiquidity(_tokenA, _tokenB, balA, balB, 0, 0, address(this), block.timestamp);
     }
 }
