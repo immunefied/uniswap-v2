@@ -157,6 +157,7 @@ contract UniswapV2SwapExamplesTest is Test {
         vm.createSelectFork("mainnet", 19_708_589);
         // vm.startPrank(alice);
         uni = new IUniswapV2SwapExamples();
+        vm.label(alice, "Alice");
     }
 
     // Swap WETH -> DAI
@@ -174,7 +175,7 @@ contract UniswapV2SwapExamplesTest is Test {
             amountIn,
             amountOutMin
         );
-        daiAmountOut;
+        assertEq(dai.balanceOf(alice), daiAmountOut);
 
         console.log("Alice WETH balance %s", weth.balanceOf(alice));
         console.log("Alice DAI balance %s", dai.balanceOf(alice));
